@@ -1,0 +1,22 @@
+.upload{ :id => "upload_#{upload.id}", :class => upload.image? ? 'image' : nil }
+  = page_upload_actions_link(page,upload)
+  - if upload.image?
+    .thumb
+      %a{:href => upload.url}
+        %img{:src => upload.url}
+  - else
+    .info
+      - icon_name = Upload::ICONS.include?(upload.file_type.downcase) ? upload.file_type : '_blank'
+      - icon_path = "file_icons/48px/#{icon_name.downcase}.png"
+      = link_to image_tag(icon_path), upload.url, :class => upload.file_type, :rel => (upload.image? ? 'facebox' : '')
+  .block
+    .filename.show_details
+      .body
+        .file
+          = link_to_upload(upload, upload.file_name)
+        - unless upload.description.blank?
+          .description
+            = upload.description
+        .reference
+          = number_to_human_size(upload.size)
+  .clear

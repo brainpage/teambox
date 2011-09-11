@@ -1,0 +1,41 @@
+%h2 Changes
+
+%p As the API is still in development, the format and queries for responses may be subject to change. Notable changes will be listed here for developers using the API.
+
+%h2 API V1
+
+%p This is the current API. All methods are implemented in a separate set of controllers under the <code>/api/1</code> namespace. You may either use JSON or regular form encoding in requests. Refer to the #{link_to('API V1 routes', api_routes_path)} for more information.
+
+%h3 Changes in the V1 API
+
+%p As this version of the API is still in development, important changes are listed below.
+
+%p <strong>2011-07-20</strong>: Added ability of creating task lists from task lists templates. Check the <a href="/api/task_list">Task Lists API</a> page.
+
+%p <strong>2011-07-11</strong>: The following changes have been introduced:
+%ul
+  %li A user's application links are now an exposed resource in the API. See the <a href="/api/app_link">AppLinks API</a> page.
+  %li Tasks and Conversations will now return their data in response to PUT (#update) requests. Check the <a href="/api/task">Tasks API</a> or the <a href="/api/conversation">Conversations API</a> for details.
+  %li The API now additionally supports the 'text/plain' mime-type which you can request using either the <code>.text</code> extension or the <code>format=text</code> parameter.
+  %li Any Google Docs attached to a comment are now exposed. See the <a href="/api/task">Tasks API</a> or the <a href="/api/conversation">Conversations API</a> for an example.
+
+%p <strong>2011-06-14</strong>: External organizations can be listed now (<tt>external=true</tt>). Check the <a href="/api/organization">Organizations API</a> page.
+%p <strong>2011-06-14</strong>: New way of filtering threaded activities (<tt>threads=true</tt>). Check the <a href="/api/activity">Activities API</a> page.
+%p <strong>2011-06-09</strong>: The pagination limits have changed. Check the <a href="/api/concepts">API concepts</a> page.
+%p <strong>2011-05-04</strong>: For simplification, all #show routes now return "references" in the response. Objects are no longer directly included in the object.
+%p
+  <strong>2011-03-25</strong>: The API now supports OAuth authentication. See the
+  = link_to 'authentication section', api_auth_path
+  for more details.
+%p <strong>2011-03-08</strong>: All API responses now include object types (previously this only happened for references).
+%p <strong>2011-01-27</strong>: Error responses in api requests have been clarified. See the concepts documentation for more information.
+%p <strong>2010-12-07</strong>: Pages#show now includes Dividers, Notes, and Uploads in <tt>objects</tt>. Querying using the /notes and /dividers routes was also fixed.
+%p <strong>2010-11-23</strong>: The first and the last 2 comments are now included when querying conversations and tasks in <tt>first_comment</tt> and <tt>recent_comments</tt> (<tt>recent_comment_ids</tt> and <tt>recent_comment_ids</tt> if listed in an index method).
+%p <strong>2010-11-10</strong>: Comments on tasks now have <tt>due_on</tt> and <tt>previous_due_on</tt> fields which track changes to the tasks due date.
+%p <strong>2011-06-22</strong>: JSON returned with the 'text/plain' content type is now supported in requests. Simply use ".text" as an extension in a route. 
+%p <strong>2010-11-01</strong>: JSONP is now supported in requests. Simply use ".js" as an extension in a route, and specify a callback to be invoked via the <tt>callback</tt> parameter. 
+%p <strong>2010-10-07</strong>: Object parameters for POST and PUT no longer need to be placed under the objects key. i.e. instead of <code>{'comment':{'body':'Test'}}</code>, use <code>{'body':'Test'}</code>.
+%p <strong>2010-10-06</strong>: To simplify routing, object paths no longer need to be prefixed by <code>/project/:permalink</code>. i.e. <code>/comments/123</code> now works instead of <code>/project/earthworks/comments/123</code>. Note that old routes will still work.
+%p <strong>2010-10-04</strong>: In order to simplify developing API apps, all queries to index methods now return objects in two keys, "objects" and "references". References are simple representations of objects referenced by the main list of objects, e.g. Projects and Users.
+
+= render 'apidocs/column'

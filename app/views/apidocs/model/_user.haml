@@ -1,0 +1,28 @@
+%p=raw "A user is an account within Teambox."
+%p=raw "Users belong to projects via the #{link_to_doc_model(:person)} model."
+
+- doc_for :index,
+          :example => example_api_wrap(@user, :references => []) do
+  %p=raw "Returns users you know."
+
+- doc_for :show,
+          :example => @user.to_api_hash do
+  %p=raw "Returns the data for a user."
+  
+- doc_for :create,
+          :parameters => {:login => "login",:email => "user@email.com",:first_name => 'John',:last_name => 'Smith',:password => "password",:password_confirm => "password",:locale => 'en'},
+          :example => example_api_wrap(@user, :references => []) do
+  %p=raw "Registers a new user."
+
+- doc_for :update,
+          :parameters => {:first_name => 'John',:last_name => 'Smith',:password => "password",:password_confirm => "password",:locale => 'en'} do
+  %p=raw "Updates an existing user."
+
+- ignore_doc_for :destroy
+
+- doc_for :current,
+          :includes => [:projects, :organizations],
+          :example => @user.to_api_hash(:include => [:email]) do
+  %p=raw "Returns the data for the current logged in user."
+
+

@@ -1,0 +1,7 @@
+<%= header_text %>
+---------------------------------------
+<% tasks.each do |task| %>
+<%= task.name %><%= " (#{due_on(task)})" if task.due_on %> <%= "[#{task.project}]" %>
+
+<% end %>
+

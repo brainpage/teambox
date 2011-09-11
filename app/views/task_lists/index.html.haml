@@ -1,0 +1,40 @@
+- if @current_project
+  .task_header
+    %p.text_actions
+      - if can? :reorder_objects, @current_project
+        = link_to t('task_lists.link.reorder'), "#", :id => :reorder_task_lists_link
+        = link_to t('task_lists.link.reorder_done'), "#", :id => :done_reordering_task_lists_link, :style => 'display:none'
+      - if can? :make_task_lists, @current_project
+        = task_list_link(@current_project)
+
+    %h2= t('.tasks_for_project', :project => @current_project)
+
+  = filter_task_lists
+
+  - if can? :make_task_lists, @current_project
+    = task_list_form(@current_project,TaskList.new)
+
+  #task_lists
+    = render_task_lists(@current_project,@task_lists)
+
+  = task_list_primer(@current_project, @task_lists.any?)
+  
+  - content_for :column do
+    = task_list_column(@current_project,@task_list)
+
+- else
+  %h2= t('.tasks_for_all_projects')
+  %p= t('.tasks_for_all_projects_explain')
+
+  = filter_task_lists
+
+  #tasks_for_all_projects
+    = tasks_for_all_projects(@tasks)
+
+  - content_for :column do
+    %h2= t('.other_views')
+    = gantt_view_link
+    = instructions_for_calendars
+    = print_task_lists_link
+
+    = javascript_tag "$('filter_assigned').value = '#{escape_javascript(value_for_assigned_to_select)}'"

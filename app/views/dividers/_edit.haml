@@ -1,0 +1,10 @@
+= form_for [divider.project,divider.page,divider], :html => { :'data-remote' => 'true' } do |f|
+  .area
+    = divider_fields(f)
+    .submit{ :id => "divider_submit_#{divider.id}" }
+      = f.submit t('.submit')
+      = t('common.or')
+      = link_to_function t('common.cancel'), remove_form("divider_#{divider.id}")
+    =loading('divider_form',divider.id)
+    .clear  
+  .clear  

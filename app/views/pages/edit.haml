@@ -1,0 +1,20 @@
+%h2= t('.title')
+
+= form_for [@current_project,@page], :html => {'data-creator-user-id' => @page.user_id, 'data-watcher-ids' => @page.watcher_ids.join(','), 'data-project-id' => @page.project_id, :class => (@page.is_private ? 'edit_page private' : 'edit_page')} do |f|
+  = page_fields(f)
+
+  .submit
+    = f.submit t('.submit')
+    = t('common.or')
+    = link_to t('common.cancel'), project_page_path(@current_project, @page)
+  
+- content_for :column do
+  %p= t 'pages.new.define1_html'
+  %p= t 'pages.new.define2_html'
+  %ul
+    %li= t 'pages.new.feature1_html'
+    %li= t 'pages.new.feature2_html'
+    %li= t 'pages.new.feature3_html'
+    %li= t 'pages.new.feature4_html'
+  %p= t 'pages.new.footer1_html'
+  %p= t 'pages.new.footer2_html'

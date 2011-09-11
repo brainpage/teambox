@@ -1,0 +1,7 @@
+.person{:id => "person_#{user.id}"}
+  = micro_avatar(user)
+  .more
+    %span.name
+      = user_link(user)
+    %span.login
+      = "@#{user.login}"

@@ -1,0 +1,12 @@
+- style = current_gantt_view?(:calendar)? '' : 'display: none'
+#upcoming_events_banner.upcoming_events_banner.banner_item{:style => style}
+  %table
+    - for table_row in [(0..6),(7..13),(14..20),(21..27)]
+      %tr
+        - for i in table_row
+          %th{ :class => event_css(i) }
+            = (Date.today.monday + i.day).strftime("%a %e")
+      %tr.days_events
+        - for i in table_row
+          %td{ :class => event_css(i) }
+            = render 'shared/event', :events => events[i]

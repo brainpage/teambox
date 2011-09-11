@@ -1,0 +1,9 @@
+folder_item_id = "folder_#{@folder.id}"
+
+page[folder_item_id].dropOut
+
+page.delay(3) do
+  page[folder_item_id].remove
+end
+
+page << "target_folders = #{json_target_folders}"

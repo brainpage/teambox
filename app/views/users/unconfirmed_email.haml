@@ -1,0 +1,14 @@
+%br
+%h2= t('.title')
+
+%p= t('.invitation_sent_to_html', :email => @email)
+%p= t('.follow_the_link_html')
+
+%h3= t('.problems_title')
+
+%ul
+  %li= t('.resend_html', :link => unconfirmed_email_user_path(current_user, :resend => true))
+  %li= t('.spam')
+  %li= t('.wrong_email_html', :link => account_settings_path)
+
+%p= t('.problems_html', :support => link_to(Teambox.config.support, Teambox.config.support))

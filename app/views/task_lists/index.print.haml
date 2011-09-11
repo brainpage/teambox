@@ -1,0 +1,9 @@
+- if @current_project
+  - if @task_lists.any?
+    #task_lists
+      = render_task_lists(@current_project,@task_lists)
+  
+- else
+  %h2= t('.tasks_for_all_projects')
+
+  = tasks_for_all_projects(@tasks)

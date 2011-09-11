@@ -1,0 +1,6 @@
+.filters
+  %strong= t('.filter_tasks') + ": "
+  %input#filter_tasks_by_name{ :type => 'search', :placeholder => t('.by_name') }
+  = filter_assigned_dropdown(@current_project)
+  = filter_due_date_dropdown(@current_project)
+  =# link_to t('.hide'), "", :class => 'closeThis'

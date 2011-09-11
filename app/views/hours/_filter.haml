@@ -1,0 +1,10 @@
+.filters
+  %strong= t('hours.report') + ' :'
+  %select#report_list
+    = list_hour_reports
+  %strong= t('hours.filter_by') + ' :'
+  = filter_hours_assigned_dropdown('hours_main_user_filter', @current_project)
+  - unless @current_project
+    = filter_project_dropdown('hours_main_project_filter')
+    = filter_organization_dropdown('hours_main_organization_filter')
+

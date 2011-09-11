@@ -1,0 +1,2 @@
+%div[slot]
+  = render :partial => slot.rel_object.slot_view, :object => slot.rel_object, :locals => {:page => page, :project => project}, :as => slot.rel_object_type.downcase.singularize.to_sym

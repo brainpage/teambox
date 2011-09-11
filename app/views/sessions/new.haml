@@ -1,0 +1,7 @@
+%h2= t('.title')
+
+= form_tag session_path, :class => 'new_session', :id => 'new_session' do
+  = upgrade_browser
+  = chrome_frame
+  = render 'sessions/fields'
+  = submit_tag t('.submit')

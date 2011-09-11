@@ -1,0 +1,42 @@
+.nav_links
+
+  -# Recent Activity
+  .el= link_to t('.recent_activity'), root_path, :class => 'recent_activity'
+
+  -# All Projects
+  .el#my_projects
+    = link_to t('.all_projects'), projects_path, :class => 'home'
+    %span -
+  .contained#my_projects_list
+
+  -# My Tasks
+  - near_tasks = current_user.nearest_pending_tasks
+  - today_tasks = near_tasks.select { |t| t.urgent? || (t.due_on && (t.due_on <= Time.now.to_date)) }
+  - late_tasks = near_tasks.select { |t| t.due_on && (t.due_on < Time.now.to_date) }
+  - pending_tasks = near_tasks - today_tasks
+  - if today_tasks.any?
+    .el#today_tasks{ :class => late_tasks.any? ? 'late_tasks' : '' }
+      = link_to t('.today'), task_lists_path, :class => 'today'
+      %span= today_tasks.length
+    .contained
+      - for task in today_tasks.reverse
+        .el.task{ :id => "my_task_#{task.id}", :class => task_classes(task) }
+          = link_to task, [task.project, task], :class => ''
+          = render_due_on(task,current_user)
+  .el#my_tasks
+    = link_to t('.my_tasks'), task_lists_path, :class => 'tasks'
+    %span.clickable= link_to pending_tasks.length, task_lists_path(:filter_assigned => 'mine'), :class => 'hoverable', :'data-hoverable-class' => 'left', :id => 'open_my_tasks', :title => t('.open_my_tasks')
+  .contained
+    - for task in pending_tasks
+      .el.task{ :id => "my_task_#{task.id}", :class => task_classes(task) }
+        = link_to task, [task.project, task], :class => ''
+        = render_due_on(task,current_user)
+    .el= link_to t('.show_all_tasks'), task_lists_path, :class => 'more'
+    .el= link_to t('.gantt_and_calendars'), gantt_view_task_lists_path, :class => 'more'
+
+  -# Organizations
+  .el#my_organizations= link_to t('.organizations'), organizations_path, :class => 'people'
+  .contained#my_organizations_list
+
+  -# More options
+  .el.extra= link_to t('.time'), time_path, :class => 'ajax time'

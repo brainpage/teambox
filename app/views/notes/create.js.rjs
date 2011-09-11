@@ -1,0 +1,21 @@
+widget_id = "note_#{@note.id}"
+
+if @note.slot_insert[:element].nil?
+  page.insert_widget(widget_id,
+                   :bottom,
+                   'slots',
+                   :partial => 'pages/slot',
+                   :object => @note.page_slot,
+                   :locals => {:page => @page, :project => @current_project})
+else  
+  page.insert_widget(widget_id,
+                   (@note.slot_insert[:before] ? :before : :after),
+                    @note.slot_insert[:element],
+                    :partial => 'pages/slot',
+                    :object => @note.page_slot,
+                    :locals => {:page => @page, :project => @current_project})
+end
+
+page.call "InsertionBar.clearWidgetForm"
+page.reload_javascript_events
+page.reload_page_sort

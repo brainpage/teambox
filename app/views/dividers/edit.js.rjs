@@ -1,0 +1,7 @@
+if @divider
+  page["divider_#{@divider.id}"].hide
+  page.insert_html :after, "divider_#{@divider.id}", :partial => 'dividers/edit', :locals => { :divider => @divider }
+  page << "$('edit_divider_#{@divider.id}').focusFirstElement()"
+else
+  page.alert t('common.not_allowed')
+end

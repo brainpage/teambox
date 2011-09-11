@@ -1,0 +1,16 @@
+- unless @task_list
+  - unless can?(:make_task_lists, project)
+    %p= t('.cant_create')
+
+- case location_name
+  - when 'show_tasks'
+    %h2= link_to h(@task_list), [@task_list.project, @task_list]
+    = sidebar_tasks(@task_list.tasks.unarchived)
+
+  - when 'index_task_lists'
+
+%h2= t('.other_views')
+= gantt_view_link(@current_project)
+= instructions_for_calendars
+= print_task_lists_link(project)
+= instructions_for_email(project)

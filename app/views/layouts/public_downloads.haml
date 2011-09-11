@@ -1,0 +1,20 @@
+!!! Strict
+%html{ :xmlns => "http://www.w3.org/1999/xhtml", 'xml:lang'=>"en", :lang=>"en" }
+  %head
+    %meta{ :charset => "UTF-8" }
+    = csrf_meta_tag
+    %link{ :rel => "shortcut icon", :href => "/favicon.ico" }
+    %title= @page_title || "Teambox"
+    = stylesheet_link_tag 'public_downloads'
+  %body{ :class => "#{location_name} #{I18n.locale} #{Rails.env} controller_#{controller.controller_name}"}
+    #wrapper
+      #logo
+        = link_to image_tag("header_logo_black.png", :alt => "Project Management Software"), "http://teambox.com"
+        %span= link_to "team collaboration", "http://teambox.com"
+      #content
+        = yield
+      - unless @current_user
+        #promo
+          %p= t('public_downloads.promo_p1', :downloadable => localized_downloadable_type)
+          %p= t('public_downloads.promo_p2')
+          %p= link_to "Get started now for free", "http://teambox.com/signup"

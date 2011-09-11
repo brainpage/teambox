@@ -1,0 +1,13 @@
+- if @pending_projects.any?
+  .invitations
+    = list_pending_invites(@pending_projects)
+
+%h2=t '.title'
+
+%p=t '.explain1_html'
+%p=t '.explain2_html'
+
+= form_for @project do |f|
+  = project_fields(f,@project)
+  .submit
+    = f.submit t('.submit'), :'data-disable-with' => t('.sending')

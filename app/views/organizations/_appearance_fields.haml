@@ -1,0 +1,15 @@
+.option_fields
+  %label= t('.logo_html')
+  .option
+    = f.file_field :logo
+  %img.logo_square{ :src => @organization.logo.url(:square) }
+  %img.logo_top{ :src => @organization.logo.url(:top) }
+  - if @organization.logo.file?
+    .option
+      = f.check_box :delete_logo
+      = f.label :delete_logo, t('.delete_custom_logo')
+
+.text_area
+  %label= t('.description_html')
+  = errors_for @organization, :description
+  = f.text_area :description

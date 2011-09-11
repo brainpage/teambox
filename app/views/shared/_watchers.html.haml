@@ -1,0 +1,13 @@
+.watching#watching
+  = watch_link(project,user,target)
+  - if target.watchers.empty?
+    = t('.nobody_watching')
+  - else
+    = t('.people_watching')
+    = target.watchers.collect {|u| h(u) }.to_sentence
+  - case state
+    - when :started_watching
+      %span.state.started#updated_watch_state= t('.started_watching')
+    - when :stopped_watching
+      %span.state.stopped#updated_watch_state= t('.stopped_watching')
+      

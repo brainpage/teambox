@@ -1,0 +1,21 @@
+if @upload.slot_insert.nil?
+  position = :bottom
+  location = 'slots'
+else
+  position = @upload.slot_insert[:before] ? :before : :after
+  location = @upload.slot_insert[:element]
+end
+
+if @upload.new_record?
+  page.alert 'There was an error uploading the file. Please try again.'
+else
+  page.insert_widget dom_id(@upload),
+                     position,
+                     location,
+                     :partial => 'pages/slot',
+                     :object => @upload.page_slot,
+                     :locals => { :page => @page, :project => @current_project }
+end
+
+page.call "InsertionBar.clearWidgetForm"
+page.reload_page_sort

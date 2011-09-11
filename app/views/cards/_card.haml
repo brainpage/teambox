@@ -1,0 +1,50 @@
+.card
+  - unless card.phone_numbers.empty?
+    .phone_numbers
+      %h3= t('.phone_numbers')
+      -for phone_number in card.phone_numbers
+        .phone.item
+          %span.type= phone_number.get_type
+          =h phone_number.name
+  - unless card.email_addresses.empty?
+    .email_addresses
+      %h3= t('.email_addresses')
+      -for email_address in card.email_addresses
+        .email_address.item
+          %span.type= email_address.get_type
+          =h email_address.name
+  - unless card.websites.empty?
+    .websites
+      %h3= t('.websites')
+      -for website in card.websites
+        .website.item
+          %span.type= website.get_type
+          =link_to h(website.to_url), website.to_url, :target => '_blank'
+  - unless card.addresses.empty?
+    .addresses
+      %h3= t('.addresses')
+      -for address in card.addresses
+        .address.item
+          %span.type= address.get_type
+          =h address.street
+          %br/
+          =h "#{address.city} #{address.state}, #{address.zip}"
+          %br/          
+          = t("countries.#{address.country}") unless address.country.blank?
+  - unless card.ims.empty?
+    .ims
+      %h3= t('.ims')
+      -for im in card.ims
+        .im.item
+          %span.type="#{im.get_type} - #{im.get_im_type}"
+          =h im.name
+  - unless card.social_networks.empty?
+    .social_networks
+      %h3= t('.social_networks')
+      -for social_network in card.social_networks
+        .social_network.item
+          %span.type= "#{social_network.get_network_type} - #{social_network.get_type}"
+          - if social_network.to_url
+            = link_to h(social_network.name), social_network.to_url, :target => '_blank'
+          - else
+            =h social_network.name

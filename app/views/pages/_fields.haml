@@ -1,0 +1,16 @@
+.name.text_field
+  .label
+    = f.label :name, t('.name')
+    .description= t('.name_description')
+  = f.text_field :name
+
+.description.text_area
+  .label
+    = f.label :description, t('.description')
+    .description= t('.description_description')
+  = f.text_field :description
+
+.option_fields
+  .label
+    %label= t('.is_private')
+.private_options{ 'object-prefix' => 'page_form', 'object-type' => 'page' }

@@ -1,0 +1,10 @@
+- if can? :make_task_lists, @current_project
+  = task_list_form(@current_project,TaskList.new)
+
+#show_task_list{}
+  = task_list_form(@current_project,@task_list)
+  = render_task_list(@current_project,@task_list)
+  = list_comments(@task_list.comments,@task_list)
+
+- content_for :column do
+  = task_list_column(@current_project,@task_list)

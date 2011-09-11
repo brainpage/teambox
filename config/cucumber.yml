@@ -1,0 +1,18 @@
+<%
+rerun = File.file?('rerun.txt') ? IO.read('rerun.txt') : ""
+rerun_opts = rerun.to_s.strip.empty? ? "--format #{ENV['CUCUMBER_FORMAT'] || 'pretty'} features" : "--format #{ENV['CUCUMBER_FORMAT'] || 'pretty'} #{rerun}"
+std_opts = "--format #{ENV['CUCUMBER_FORMAT'] || 'pretty'} --strict --tags ~@wip"
+
+mislav_opts = if File.file?('rerun.txt') and rerun.empty?
+  features = `find features -name '*.feature' -newer rerun.txt -print0`.split("\0")
+  rerun_opts.sub(/features$/, features.join(" "))
+else
+  rerun_opts
+end
+
+
+%>
+default: <%= std_opts %> features
+wip: --tags @wip:3 --wip features
+rerun: <%= rerun_opts %> --format rerun --out rerun.txt --strict --tags ~@wip
+mislav: <%= mislav_opts %> --format rerun --out rerun.txt --strict --tags ~@wip

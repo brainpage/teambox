@@ -1,0 +1,164 @@
+%h2 API structure
+
+%p
+  Every part of Teambox can be accessed by the API with simple requests.
+  Usual actions include listing objects, adding a new one, editing,
+  showing one and destroying a record (index, new, edit, show, delete).
+
+%h2 Understanding Teambox models
+
+%p In Teambox, your account is a User model. A User can belong to many Projects.
+%p
+  The membership of a User in a Project is represented by a Person model.
+  Person stores information like the role and the date when User joined the Project.
+%p
+  Projects are owned by one User, and have many other Users in it. Projects
+  contain Comments, Conversations, Task Lists, Tasks, Pages and Files.
+%p
+  Comments are the most important concept in Teambox.
+  A Comment belongs to a Conversation or a Task, allowing them to be threaded.
+  Comments store important information, like the number of hours you spent on
+  a Task or status changes for it.
+%p Similarly, Task Lists have Tasks. Task Lists provide information like start and end dates.
+%p Pages contain different elements: Notes (text with a title), Dividers and Files.
+%p Files can belong to a project independently, or they can be attached to a Comment or Page.
+%p Invitations are sent before you join a project, to request you to join it.
+
+%p 
+
+%h2 HTTP Status Codes
+
+%p
+  For each request you make to the Teambox API, we will return an <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">HTTP status code</a>.
+  Following convention, the following status codes will be returned for each request:
+
+%ul
+  %li 200: Success. The object was found, created, updated or deleted successfully
+  %li 404: The object you're looking for doesn't exist.
+  %li 406: Not Acceptable (invalid format). You're probably sending wrong JSON or you need to specify the HTTP headers.
+  %li 409: Conflict (item already exists).
+  %li 422: Unprocessable Entry.
+  %li 500: Server Error (hopefully not!). This means our server has some sort of problem.
+
+%h2 Request headers
+
+%p For each request, please specify the following headers:
+
+%pre= "Accept: application/json"
+
+%p You can also use JSONP via <code>application/javascript</code>, or by using the extension ".js" in the route.
+
+%h2 Authentication
+
+%p Teambox currently uses OAuth 2 for authentication. Refer to the <a href="/api/auth">Authentication</a> section for more details on how to generate access tokens.
+
+%h2 General usage 
+
+%p
+  The following project objects have APIs: Projects, Activities, Users, Comments,
+  Conversations, Task Lists, Tasks, Pages, Invitations and Files. You can access them
+  through RESTful interfaces, described below.
+
+%p
+  You can also access certain project objects outside projects.
+  In this case a list will be returned of objects from all of your projects:
+
+%ul
+  %li Task lists <code>/task_lists</code>
+  %li Activities <code>/activities</code>
+
+%p You can also access user data shared amongst projects, such as:
+
+%ul
+  %li Users <code>/users</code>
+
+%h2 Responses
+
+%p
+  There are two possible types of response in the API, depending on whether you are retrieving a collection of objects or just a single object:
+
+%h3 Collection of objects
+
+%pre
+  \
+  {
+  \  "references": [{
+  \    "id": "123",
+  \    "type: "User"
+  \  }, ...],
+  \  "objects": [...]
+  }
+
+%p For a collection of objects, the actual objects will be returned in the "objects" list, while any object referenced by the collection will be returned in the "references" list. This reduces the amount of redundant data in a request.
+
+%h3 Pagination
+
+%p The number of returned objects is by default limited to 20. This limit can be changed by providing a <tt>count</tt> parameter. If the value of <tt>count</tt> is <tt>0</tt> there won't be any limit, so all the objects will be returned.
+%p There is one exception to this rule, which is the activities index action (<tt>/api/1/activites</tt> or <tt>/api/1/projects/:project_id/activites</tt>), where the limit cannot be changed to more than 20.
+%p To paginate through the entire collection, you will need to use the following parameters:
+
+%ul
+  %li <tt>since_id</tt> to get items created <strong>AFTER</strong> the specified id.
+  %li <tt>max_id</tt> to get items created <strong>BEFORE</strong> the specified id.
+  %li a combination of <tt>since_id</tt> and <tt>max_id</tt> to get items in a range.
+
+%h3 Single object
+
+%pre
+  \
+  {
+  \  "id": "123",
+  \  ...
+  }
+
+%p For a single object, you will get a single JSON object containing the properties of the said object. In addition if you pass in one or more <tt>include[]</tt> parameters, additional referenced elements will be returned in the object, e.g. comments. Refer to the "Includes" section on a route for available includes.
+
+%h3 Errors
+
+%pre
+  \
+  {
+  \  "errors": {"message": "Something went wrong", "type": "SomethingWrongError"},
+  \  ...
+  }
+
+%p If an error occurred during a request, you will get the "errors" returned in a JSON object. In the case of POST or PUT requests, each key in "errors" corresponds to a field in the related object you are trying to create or modify.
+
+%p In all cases you will get at least two keys in "errors", i.e.
+%ul
+  %li type: The type of the error
+  %li message: Message to describe the error
+
+%p Note that there are currently only 3 error types that can be returned. They are:
+
+%ul
+  %li AuthorizationFailed: A login is required
+  %li InsufficientPermissions: You do not have the necessary permissions to perform this action
+  %li InvalidRecord: One of more fields in your object are invalid
+  %li ObjectNotFound: One or more specified objects were not found
+
+%p In all cases you will also get an equivalent HTTP Status code returned.
+
+%h3 JSONP requests
+
+%p For JSONP requests (using the "js" format), the response will be javascript of the following format:
+
+%pre callback({DATA})
+
+%p Where "callback" is a javascript function specified by the <tt>callback</tt> parameter, and "DATA" is the normal data returned by the request.
+
+%h2 A note about RESTful routes
+
+%p Unless otherwise stated, most objects on the API conform to the following routes:
+
+%ul
+  %li GET <code>/collection</code> to list objects
+  %li GET <code>/collection/id</code> to show an object
+  %li POST <code>/collection</code> to create objects
+  %li PUT <code>/collection/id</code> to update an object
+  %li DELETE <code>/collection/id</code> to delete an object
+
+%p All API methods accept JSON as input, and will return either JSON or JSONP if specified.
+%p XML and YAML might be present on some parts, but are not officially supported.
+
+= render 'apidocs/column'

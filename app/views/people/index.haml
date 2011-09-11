@@ -1,0 +1,33 @@
+- if can? :admin, @current_project
+  = render 'invitations/new', :project => @current_project, :invitation => Invitation.new(:role => 3)
+
+#people.people
+  = render @invitations
+  = render @people, :project => @current_project
+
+- content_for :column do
+  - if @current_project.admin?(current_user)
+    - other_projects = current_user.projects - [@current_project]
+    - if other_projects.any?
+      - form_tag project_contacts_path(@current_project), :method => 'get', :id => 'other_projects' do
+        %h2= t('invitations.search.invite_from_project')
+        .field
+          = select_tag :id, options_from_other_projects(other_projects)
+          = loading_image "people_project_load"
+      #sidebar_people
+
+  - else
+    - @admins = @people.map(&:user).select { |user| @current_project.admin?(user) }
+    %h2= t('people.column.inviting')
+    %p= t('people.column.only_admins_can_invite') 
+    %p= t('people.column.contact_admins',
+          :admins => @admins.collect { |user| link_to(h(user), user) }.to_sentence,
+          :count => @admins.size).html_safe
+
+  - current_person = @people.find { |p| p.user == current_user }
+  %h2= t('people.column.leaving')
+  - if can? :destroy, current_person
+    %p= t('people.column.you_can_leave')
+    %p= leave_project_link(@current_project)
+  - else
+    %p= t('people.column.you_cannot_leave')

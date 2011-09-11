@@ -1,0 +1,17 @@
+%h2= t('.title', :name => h(@organization))
+
+%p= t('.you_cant_access')
+- unless Teambox.config.community
+  %p= t('.create_your_own_org_html', :link => organizations_path)
+
+%br
+
+- if @organization.admins.any?
+  %p= t('.request_permission')
+
+  .users.users_admins
+    - @organization.admins.each do |user|
+      %p.user
+        = micro_avatar(user)
+        = link_to h(user), user
+        .clear

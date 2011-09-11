@@ -1,0 +1,17 @@
+item_id = "#{@moveable_type}_#{@moveable.id}"
+if @moveable.errors.empty?
+  page.delay(3) do
+    page[item_id].remove
+  end
+  unless @target_folder_id.nil?
+    target = "folder_#{@target_folder_id}"
+    page << "if($('#{target}')) {"
+      page << "alternate = $('#{target}').hasClassName('alternate')"
+      page[target].replace :partial => 'folders/folder', :locals => {:folder => @target_folder}
+      page << "if(alternate == false) {$('#{target}').removeClassName('alternate');}"
+    page << '}'
+  end
+else
+  page.alert(flash.now[:error])
+  page[item_id].appear
+end
