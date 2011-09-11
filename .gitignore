@@ -2,7 +2,6 @@
 .DS_Store
 .idea
 .bundle
-.rvmrc
 *.esproj
 .sass-cache
 /assets
